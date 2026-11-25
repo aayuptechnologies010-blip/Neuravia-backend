@@ -36,7 +36,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Mount Routes
 app.use('/api/upload', require('./src/routes/uploadRoutes'));
 app.use('/api/auth', require('./src/routes/authRoutes'));
+app.use('/api/customer', require('./src/routes/customerAuthRoutes'));
+app.use('/api/customer', require('./src/routes/customerAppRoutes'));
 app.use('/api/therapists', require('./src/routes/therapistRoutes'));
+app.use('/api/specialities', require('./src/routes/specialityRoutes'));
 app.use('/api/bookings', require('./src/routes/bookingRoutes'));
 app.use('/api/enquiries', require('./src/routes/enquiryRoutes'));
 app.use('/api/plans', require('./src/routes/planRoutes'));

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Plan = require('../models/Plan');
+const { createAndBroadcastNotification } = require('../utils/fcmService');
 const { protectAdmin } = require('../middleware/auth');
 
 const defaultPlans = [
@@ -112,6 +113,12 @@ router.get('/admin/all', protectAdmin, async (req, res) => {
 router.post('/', protectAdmin, async (req, res) => {
   try {
     const plan = await Plan.create(req.body);
+    await createAndBroadcastNotification({
+      title: `New Plan: ${plan.name}`,
+      body: `${plan.subtitle || 'Check out our new therapy session plan'} — ₹${plan.price}`,
+      type: 'plan',
+      targetId: plan._id
+    });
     res.status(201).json({ success: true, data: plan });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });

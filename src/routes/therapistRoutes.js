@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Therapist = require('../models/Therapist');
+const { createAndBroadcastNotification } = require('../utils/fcmService');
 const { protectAdmin } = require('../middleware/auth');
 
 // Default initial therapists seeded with all 18 requested fields
@@ -190,6 +191,12 @@ router.post('/', protectAdmin, async (req, res) => {
   try {
     const data = normalizeTherapistData(req.body);
     const therapist = await Therapist.create(data);
+    await createAndBroadcastNotification({
+      title: `New Therapist Joined: ${therapist.name}`,
+      body: `${therapist.title} (${therapist.specialization}) is now available on Neuravia.`,
+      type: 'therapist',
+      targetId: therapist._id
+    });
     res.status(201).json({ success: true, data: therapist });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });

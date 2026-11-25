@@ -36,6 +36,18 @@ const bookingSchema = new mongoose.Schema({
     type: Number,
     default: 499
   },
+  bookedMinutes: {
+    type: Number,
+    default: 50
+  },
+  remainingMinutes: {
+    type: Number,
+    default: 50
+  },
+  remainingSeconds: {
+    type: Number,
+    default: 3000
+  },
   status: {
     type: String,
     enum: ['Scheduled', 'Confirmed', 'Completed', 'Cancelled'],
